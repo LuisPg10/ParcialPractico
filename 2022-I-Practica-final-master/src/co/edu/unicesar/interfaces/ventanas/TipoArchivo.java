@@ -2,7 +2,10 @@ package co.edu.unicesar.interfaces.ventanas;
 
 import co.edu.unicesar.interfaces.excepciones.ExcepcionArchivo;
 import co.edu.unicesar.interfaces.paneles.PanelAgregar;
+import static co.edu.unicesar.interfaces.paneles.PanelConsultar.guardarDato;
 import co.edu.unicesar.modelo.Publicacion;
+import co.edu.unicesar.persistencia.Archivo;
+import co.edu.unicesar.persistencia.ArchivoObjeto;
 import co.edu.unicesar.persistencia.ArchivoTexto;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,44 +16,43 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-public class TipoArchivo extends JFrame implements ActionListener{
+public class TipoArchivo extends JDialog implements ActionListener{
     
     private JRadioButton txt,objeto;
     private ButtonGroup grupo;
     private JPanel panelOpciones,panelBotones;
     private JButton cancelar,aceptar;
     private JLabel mensaje;
-    public static ArchivoTexto archivo;
-    private final List<Publicacion> publicaciones;
+    public static Archivo archivo;
+    private boolean guardar;
     
     Font fuenteOpciones = new Font("Serif",Font.PLAIN,16);
     Font fuente = new Font("Serif",Font.PLAIN,16);
     
-    public TipoArchivo(JPanel lugar,List<Publicacion> publicaciones){
+    public TipoArchivo(JPanel lugar){
         
-        this.publicaciones = publicaciones;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(350,250);
         this.setTitle("Guardar");
         
         iniciarComponentes();
         
-        this.setLocationRelativeTo(lugar);
         this.setResizable(false);
+        this.setLocationRelativeTo(lugar);
         this.validate();
     }
     
+    public TipoArchivo(){
+        
+    }
     private void iniciarComponentes(){
         
         this.iniciarPanelOpciones();
@@ -97,7 +99,6 @@ public class TipoArchivo extends JFrame implements ActionListener{
         this.add(this.panelOpciones,BorderLayout.NORTH);
     }
     
-    
     private void iniciarPanelBotones(){
         
         this.panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER,8,10));
@@ -117,10 +118,28 @@ public class TipoArchivo extends JFrame implements ActionListener{
         this.add(this.panelBotones,BorderLayout.SOUTH);
     }
     
+    public boolean getGuardar(){return this.guardar;}
+    public void setGuardar(boolean guardar){this.guardar=guardar;}
+    
+    public void guardar(Publicacion p){
+        archivo.guardarPublicacion(p);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent ae) {
         
         if(ae.getSource()==this.cancelar){
+            
+            if(txt.isSelected()){
+                txt.setSelected(false);
+            }
+            if(objeto.isSelected()){
+                objeto.setSelected(false);
+            }
+            if(mensaje.isVisible()){
+                this.mensaje.setVisible(false);
+            }
+            guardar = false;
             this.dispose();
             
         }else if(ae.getSource()==this.aceptar){
@@ -129,19 +148,34 @@ public class TipoArchivo extends JFrame implements ActionListener{
                 this.mensaje.setVisible(true);
                 
             }else if(this.txt.isSelected()){
+                
                 this.mensaje.setVisible(false);
                 
-                TipoArchivo.archivo = new ArchivoTexto();
-                
-                for(Publicacion publicacion: this.publicaciones){
-                    
-                    TipoArchivo.archivo.guardarPublicacion(publicacion);
-                }
-                
+                archivo = new ArchivoTexto();
+                this.guardar = true;
+                try{
+                        guardarDato(PanelAgregar.listaPublicacion.leerPublicaciones());
+                        
+                    }catch(ExcepcionArchivo e){
+                        
+                        JOptionPane.showMessageDialog(this, e.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
+                    }
                 this.dispose();
                 
             }else if(this.objeto.isSelected()){
+                
                 this.mensaje.setVisible(false);
+                
+                archivo = new ArchivoObjeto();
+                this.guardar = true;
+                try{
+                    guardarDato(PanelAgregar.listaPublicacion.leerPublicaciones());
+                        
+                }catch(ExcepcionArchivo e){
+                        
+                    JOptionPane.showMessageDialog(this, e.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
+                }
+                this.dispose();
             }
         }
     }

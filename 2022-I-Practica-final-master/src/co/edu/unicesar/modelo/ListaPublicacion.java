@@ -1,6 +1,5 @@
 package co.edu.unicesar.modelo;
 
-import co.edu.unicesar.interfaces.excepciones.ExcepcionArchivo;
 import co.edu.unicesar.persistencia.*;
 import java.util.List;
 

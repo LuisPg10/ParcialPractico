@@ -282,7 +282,7 @@ public class PanelAgregar extends javax.swing.JPanel {
                 }
                 
                 if(vacio){
-                    JOptionPane.showMessageDialog(this,"No debe haber campos vacíos");
+                    JOptionPane.showMessageDialog(this,"No debe haber campos vacíos","Campos vacíos",JOptionPane.WARNING_MESSAGE);
                     
                 }else{
                     
@@ -314,7 +314,7 @@ public class PanelAgregar extends javax.swing.JPanel {
                         
                     }catch (NumberFormatException e){
                         
-                        JOptionPane.showMessageDialog(this,"No has digitado el dato correcto");
+                        JOptionPane.showMessageDialog(this,"Te has equivocado escribiendo algún dato número, revisa","Dato incorrecto",JOptionPane.WARNING_MESSAGE);
                     }
                 }
                 break;

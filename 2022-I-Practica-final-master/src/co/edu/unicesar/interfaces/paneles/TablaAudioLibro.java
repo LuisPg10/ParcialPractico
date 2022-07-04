@@ -1,21 +1,23 @@
 package co.edu.unicesar.interfaces.paneles;
 
 import co.edu.unicesar.interfaces.excepciones.ExcepcionArchivo;
+import co.edu.unicesar.interfaces.ventanas.TipoArchivo;
 import co.edu.unicesar.modelo.AudioLibro;
-import co.edu.unicesar.persistencia.ArchivoTexto;
+import co.edu.unicesar.modelo.Publicacion;
+import co.edu.unicesar.persistencia.Archivo;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class TablaAudioLibro extends javax.swing.JPanel {
     
     protected static DefaultTableModel dtm;
-    private static Object[] fila  = new Object[8];
+    private static final Object[] fila  = new Object[8];
     
     public TablaAudioLibro() {
         initComponents();
         
         dtm = (DefaultTableModel) tablaAudioLibro.getModel();
-        this.cargarDatos();
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -78,34 +80,40 @@ public class TablaAudioLibro extends javax.swing.JPanel {
         dtm.addRow(fila);
     }
     
-     private void cargarDatos(){
+    public void cargarDatos(){
         
-        ArchivoTexto datos = new ArchivoTexto();
+        Archivo datos = TipoArchivo.archivo;
         
         try{
+            List<Publicacion> dato = datos.leerPublicaciones();
             
-            for(int i = 0; i <datos.leerPublicaciones().size(); i++){
-            
-                String dato[] = datos.leerPublicaciones().get(i).split(";");
-                
-                if(dato[0].equalsIgnoreCase("A")){
-                    
-                    fila[0] = dato[1];
-                    fila[1] = dato[2];
-                    fila[2] = dato[3];
-                    fila[3] = dato[5];
-                    fila[4] = dato[4];
-                    fila[5] = dato[6];
-                    fila[6] = dato[7];
-                    fila[7] = dato[8];
-                    
-                    dtm.addRow(fila);  
-                }
+            for(int i = 0; i <dato.size(); i++){
+                Publicacion publicacion = datos.leerPublicaciones().get(i);
+                formatoFilas(publicacion);
             }
         }catch(ExcepcionArchivo ae){
             JOptionPane.showMessageDialog(null, ae.getMessage(),"Error al cargar los datos",JOptionPane.WARNING_MESSAGE);
         }
         
+    }
+    
+    private void formatoFilas(Publicacion publicacion){
+        
+        String formatoDato[] = publicacion.getDataStringFormat().split(";");
+        
+        if(formatoDato[0].equalsIgnoreCase("A")){
+
+            fila[0] = formatoDato[1];
+            fila[1] = formatoDato[2];
+            fila[2] = formatoDato[3];
+            fila[3] = formatoDato[5];
+            fila[4] = formatoDato[4];
+            fila[5] = formatoDato[6];
+            fila[6] = formatoDato[7];
+            fila[7] = formatoDato[8];
+
+            dtm.addRow(fila);  
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

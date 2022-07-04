@@ -1,10 +1,13 @@
 package co.edu.unicesar.interfaces.paneles;
 
 import co.edu.unicesar.interfaces.excepciones.ExcepcionArchivo;
+import co.edu.unicesar.interfaces.ventanas.TipoArchivo;
 import co.edu.unicesar.modelo.Libro;
-import co.edu.unicesar.persistencia.ArchivoTexto;
+import co.edu.unicesar.modelo.Publicacion;
+import co.edu.unicesar.persistencia.Archivo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,7 +20,6 @@ public class TablaLibro extends javax.swing.JPanel {
         initComponents();
         
         dtm = (DefaultTableModel) tablaLibro.getModel();
-        this.cargarDatos();
     }
     
     MouseAdapter eventoEliminar = new MouseAdapter() {
@@ -42,9 +44,16 @@ public class TablaLibro extends javax.swing.JPanel {
                 "Idbn", "Titulo", "Autor", "Costo", "Año", "No. Edición", "No. Pág"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -85,33 +94,41 @@ public class TablaLibro extends javax.swing.JPanel {
         dtm.addRow(fila);
     }
     
-    private void cargarDatos(){
+    public void cargarDatos(){
         
-        ArchivoTexto datos = new ArchivoTexto();
+        Archivo datos = TipoArchivo.archivo;
         
         try{
             
-            for(int i = 0; i <datos.leerPublicaciones().size(); i++){
+            List<Publicacion> dato = datos.leerPublicaciones();
             
-                String dato[] = datos.leerPublicaciones().get(i).split(";");
-                
-                if(dato[0].equalsIgnoreCase("L")){
-                    
-                    fila[0] = dato[1];
-                    fila[1] = dato[2];
-                    fila[2] = dato[3];
-                    fila[3] = dato[5];
-                    fila[4] = dato[4];
-                    fila[5] = dato[6];
-                    fila[6] = dato[7];
-            
-                    dtm.addRow(fila);  
-                }
+            for(int i = 0; i <dato.size(); i++){
+                Publicacion publicacion = dato.get(i);
+                formatoFilas(publicacion);
             }
+            
         }catch(ExcepcionArchivo ae){
             JOptionPane.showMessageDialog(null, ae.getMessage(),"Error al cargar los datos",JOptionPane.WARNING_MESSAGE);
         }
         
+    }
+    
+    private void formatoFilas(Publicacion publicacion){
+        
+        String formatoDato[] = publicacion.getDataStringFormat().split(";");
+        
+        if(formatoDato[0].equalsIgnoreCase("L")){
+
+            fila[0] = formatoDato[1];
+            fila[1] = formatoDato[2];
+            fila[2] = formatoDato[3];
+            fila[3] = formatoDato[5];
+            fila[4] = formatoDato[4];
+            fila[5] = formatoDato[6];
+            fila[6] = formatoDato[7];
+            
+            dtm.addRow(fila);  
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
