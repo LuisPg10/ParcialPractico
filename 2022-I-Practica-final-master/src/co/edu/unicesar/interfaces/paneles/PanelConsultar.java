@@ -319,7 +319,7 @@ public class PanelConsultar extends javax.swing.JPanel {
 
     private void txtGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGuardarMouseClicked
 
-        if (TablaLibro.dtm.getRowCount() == 0 && TablaAudioLibro.dtm.getColumnCount() == 0) {
+        if (TablaLibro.dtm.getRowCount() == 0 && TablaAudioLibro.dtm.getRowCount()== 0) {
             JOptionPane.showMessageDialog(this, "No hay publicaciones para registrar", "Guardar", JOptionPane.WARNING_MESSAGE);
 
         } else {
@@ -448,7 +448,7 @@ public class PanelConsultar extends javax.swing.JPanel {
 
                 Archivo archivoGuardado = TipoArchivo.archivo;
 
-                if (archivoGuardado.getArchivo().exists()) {
+                if (archivoGuardado!=null) {
 
                     int fila[] = tabla.getSelectedRows();
                     int cantidadData = tabla.getColumnCount();
@@ -460,7 +460,7 @@ public class PanelConsultar extends javax.swing.JPanel {
                         String isbn = (String) modelo.getValueAt(fila[i], 0);
                         String titulo = (String) modelo.getValueAt(fila[i], 1);
                         String autor = (String) modelo.getValueAt(fila[i], 2);
-                        double costo = Double.parseDouble((String) modelo.getValueAt(fila[i], 3));
+                        double costo = (double)modelo.getValueAt(fila[i], 3);
                         int year = Integer.parseInt((String) modelo.getValueAt(fila[i], 4));
 
                         if (cantidadData == 7) {
@@ -471,8 +471,8 @@ public class PanelConsultar extends javax.swing.JPanel {
 
                         } else {
                             String formato = (String) modelo.getValueAt(fila[i], 5);
-                            double peso = Double.parseDouble((String) modelo.getValueAt(fila[i], 6));
-                            double duracion = Double.parseDouble((String) modelo.getValueAt(fila[i], 7));
+                            double peso = (double) modelo.getValueAt(fila[i], 6);
+                            double duracion = (double) modelo.getValueAt(fila[i], 7);
 
                             p = new AudioLibro(duracion, peso, formato, isbn, titulo, autor, year, costo);
                         }

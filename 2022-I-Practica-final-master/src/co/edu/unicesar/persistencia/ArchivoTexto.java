@@ -138,6 +138,7 @@ public class ArchivoTexto extends Archivo{
     public void eliminar(Publicacion p) throws ExcepcionArchivo{
         
         ArchivoTexto archivoTmp = new ArchivoTexto("Registro.tpm");
+        int i = 0;
         
         try{
             
@@ -147,11 +148,15 @@ public class ArchivoTexto extends Archivo{
                 Publicacion aux = this.cargarDatos(datos);
                 
                 if(!aux.getIsbn().equalsIgnoreCase(p.getIsbn())){
-                    archivoTmp.guardarPublicacion(aux);   
+                    archivoTmp.guardarPublicacion(aux);
+                    i++;
                 }
             }
-            this.modoLectura.close();
-            this.renombrarArchivo(archivoTmp.archivo);
+            
+            if(i>=1){
+                this.modoLectura.close();
+                this.renombrarArchivo(archivoTmp.archivo);
+            }
             
         }catch (FileNotFoundException ae){
             throw new ExcepcionArchivo("No se pudo abrir el archivo");
