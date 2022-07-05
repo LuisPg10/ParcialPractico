@@ -357,6 +357,7 @@ public class PanelConsultar extends javax.swing.JPanel {
                     if (p == null) {
                         dato.guardarPublicacion(publicacion);
                         agregado++;
+                        publicaciones.remove(p);
                     }
                 } catch (ExcepcionArchivo e) {
                     throw new ExcepcionArchivo("No se pudo abrir el archivo");
@@ -481,6 +482,7 @@ public class PanelConsultar extends javax.swing.JPanel {
                         }catch (ExcepcionArchivo e){
                             JOptionPane.showMessageDialog(this, e.getMessage(),"Error Eliminar",JOptionPane.WARNING_MESSAGE);
                         }
+                        PanelAgregar.listaPublicacion.leerPublicaciones().remove(p);
                     }
                 }
                 for (int i = 0; i < filas; i++) {

@@ -37,10 +37,14 @@ public class ArchivoTexto extends Archivo{
             
             this.modoEscritura = new FileWriter(archivo, true);
             pw = new PrintWriter(this.modoEscritura);
-            pw.println(p.getDataStringFormat());
+            if(p == null){
+                pw.println("");
+            }else{
+                pw.println(p.getDataStringFormat());
+            }
             
         }catch (IOException ae){
-            JOptionPane.showMessageDialog(null,"Error al guardar el archivo","Erro",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Error al guardar el archivo","Error",JOptionPane.WARNING_MESSAGE);
         }finally{
             if(pw!=null){
                 pw.close();
@@ -152,11 +156,11 @@ public class ArchivoTexto extends Archivo{
                     i++;
                 }
             }
-            
-            if(i>=1){
-                this.modoLectura.close();
-                this.renombrarArchivo(archivoTmp.archivo);
+            if(i==0){
+                archivoTmp.guardarPublicacion(null);   
             }
+            this.renombrarArchivo(archivoTmp.archivo);
+            this.modoLectura.close();
             
         }catch (FileNotFoundException ae){
             throw new ExcepcionArchivo("No se pudo abrir el archivo");
