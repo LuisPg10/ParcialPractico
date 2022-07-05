@@ -6,7 +6,6 @@ import co.edu.unicesar.modelo.AudioLibro;
 import co.edu.unicesar.modelo.Libro;
 import co.edu.unicesar.modelo.Publicacion;
 import co.edu.unicesar.persistencia.Archivo;
-import co.edu.unicesar.persistencia.ArchivoObjeto;
 import co.edu.unicesar.persistencia.ArchivoTexto;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -460,19 +459,19 @@ public class PanelConsultar extends javax.swing.JPanel {
                         String isbn = (String) modelo.getValueAt(fila[i], 0);
                         String titulo = (String) modelo.getValueAt(fila[i], 1);
                         String autor = (String) modelo.getValueAt(fila[i], 2);
-                        double costo = (double)modelo.getValueAt(fila[i], 3);
-                        int year = Integer.parseInt((String) modelo.getValueAt(fila[i], 4));
+                        double costo = Double.valueOf(String.valueOf(modelo.getValueAt(fila[i], 3)));
+                        int year = Integer.valueOf(String.valueOf(modelo.getValueAt(fila[i], 4)));
 
                         if (cantidadData == 7) {
-                            int edit = Integer.parseInt((String) modelo.getValueAt(fila[i], 5));
-                            int pag = Integer.parseInt((String) modelo.getValueAt(fila[i], 6));
+                            int edit = Integer.valueOf(String.valueOf(modelo.getValueAt(fila[i], 5)));
+                            int pag = Integer.valueOf(String.valueOf(modelo.getValueAt(fila[i],6)));
 
                             p = new Libro(pag, edit, isbn, titulo, autor, year, costo);
 
                         } else {
                             String formato = (String) modelo.getValueAt(fila[i], 5);
-                            double peso = (double) modelo.getValueAt(fila[i], 6);
-                            double duracion = (double) modelo.getValueAt(fila[i], 7);
+                            double peso = Double.valueOf(String.valueOf(modelo.getValueAt(fila[i], 6)));
+                            double duracion = Double.valueOf(String.valueOf(modelo.getValueAt(fila[i], 7)));
 
                             p = new AudioLibro(duracion, peso, formato, isbn, titulo, autor, year, costo);
                         }
