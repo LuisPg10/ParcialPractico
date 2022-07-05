@@ -6,6 +6,7 @@ import co.edu.unicesar.modelo.AudioLibro;
 import co.edu.unicesar.modelo.Libro;
 import co.edu.unicesar.modelo.Publicacion;
 import co.edu.unicesar.persistencia.Archivo;
+import co.edu.unicesar.persistencia.ArchivoObjeto;
 import co.edu.unicesar.persistencia.ArchivoTexto;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -318,7 +319,7 @@ public class PanelConsultar extends javax.swing.JPanel {
 
     private void txtGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGuardarMouseClicked
 
-        if (TablaLibro.dtm.getRowCount() == 0 || TablaAudioLibro.dtm.getColumnCount() == 0) {
+        if (TablaLibro.dtm.getRowCount() == 0 && TablaAudioLibro.dtm.getColumnCount() == 0) {
             JOptionPane.showMessageDialog(this, "No hay publicaciones para registrar", "Guardar", JOptionPane.WARNING_MESSAGE);
 
         } else {
@@ -413,7 +414,7 @@ public class PanelConsultar extends javax.swing.JPanel {
 
             if (TablaAudioLibro.dtm.getRowCount() > 0) {
                 for (int i = 0; i < TablaAudioLibro.dtm.getRowCount(); i++) {
-                    TablaLibro.dtm.removeRow(i);
+                    TablaAudioLibro.dtm.removeRow(i);
                 }
             }
             tablaAudio.cargarDatos();
@@ -439,7 +440,6 @@ public class PanelConsultar extends javax.swing.JPanel {
 
         } else {
             int filas = tabla.getSelectedRows().length;
-            int columnas = tabla.getSelectedColumns().length;
 
             if (filas == 0) {
                 JOptionPane.showMessageDialog(this, "No ha seleccionado ninguna publicación",
@@ -476,8 +476,12 @@ public class PanelConsultar extends javax.swing.JPanel {
 
                             p = new AudioLibro(duracion, peso, formato, isbn, titulo, autor, year, costo);
                         }
-
-                        //archivoGuardado.eliminar(p);
+                        
+                        try{
+                            archivoGuardado.eliminar(p);
+                        }catch (ExcepcionArchivo e){
+                            JOptionPane.showMessageDialog(this, e.getMessage(),"Error Eliminar",JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 }
                 for (int i = 0; i < filas; i++) {

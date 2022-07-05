@@ -4,6 +4,7 @@ import co.edu.unicesar.interfaces.excepciones.ExcepcionArchivo;
 import co.edu.unicesar.modelo.AudioLibro;
 import co.edu.unicesar.modelo.Libro;
 import co.edu.unicesar.modelo.Publicacion;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -119,10 +120,24 @@ public class ArchivoTexto extends Archivo{
         }
     }
     
-    public Publicacion eliminar(Publicacion p) throws ExcepcionArchivo{
+    private void renombrarArchivo(File tmp) throws IOException{
+        if(!tmp.exists())
+            throw new IOException("El archivo temporal no existe");
+            
+        if(!this.archivo.delete()){
+            tmp.delete();
+            throw new IOException("No es posible eliminar el archivo original");
+        }
         
-        Publicacion eliminada = null;
-        ArchivoTexto archivoTmp = new ArchivoTexto("RegistroTmp.txt");
+        if(!tmp.renameTo(this.archivo)){
+            throw new IOException("No es posible renombrar el archivo temporal");
+        }    
+    }
+    
+    @Override
+    public void eliminar(Publicacion p) throws ExcepcionArchivo{
+        
+        ArchivoTexto archivoTmp = new ArchivoTexto("Registro.tpm");
         
         try{
             
@@ -131,16 +146,12 @@ public class ArchivoTexto extends Archivo{
                 String datos[] = this.modoLectura.nextLine().split(";");
                 Publicacion aux = this.cargarDatos(datos);
                 
-                if(aux.getIsbn().equalsIgnoreCase(p.getIsbn())){
-                    archivoTmp.guardarPublicacion(aux);
-                    
-                }else{
-                    eliminada = aux;
+                if(!aux.getIsbn().equalsIgnoreCase(p.getIsbn())){
+                    archivoTmp.guardarPublicacion(aux);   
                 }
             }
             this.modoLectura.close();
             this.renombrarArchivo(archivoTmp.archivo);
-            return eliminada;
             
         }catch (FileNotFoundException ae){
             throw new ExcepcionArchivo("No se pudo abrir el archivo");
@@ -153,4 +164,5 @@ public class ArchivoTexto extends Archivo{
                 this.modoLectura.close();
         }
     }
+    
 }

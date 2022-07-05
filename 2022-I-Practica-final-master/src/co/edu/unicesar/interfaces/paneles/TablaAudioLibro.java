@@ -92,7 +92,7 @@ public class TablaAudioLibro extends javax.swing.JPanel {
                 formatoFilas(publicacion);
             }
         }catch(ExcepcionArchivo ae){
-            JOptionPane.showMessageDialog(null, ae.getMessage(),"Error al cargar los datos",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, ae.getMessage(),"Error al cargar las publicaciones de audio libro",JOptionPane.WARNING_MESSAGE);
         }
         
     }

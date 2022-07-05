@@ -26,12 +26,12 @@ public class ArchivoObjeto extends Archivo{
     }
     
     @Override
-    public void guardarPublicacion(Publicacion publiaciones) {
+    public void guardarPublicacion(Publicacion p) {
         try {
             this.modoEscritura = new FileOutputStream(this.archivo);
-            ObjectOutputStream oos = new ObjectOutputStream(this.modoEscritura);
-            oos.writeObject(publiaciones);
-            oos.close();
+            try (ObjectOutputStream oos = new ObjectOutputStream(this.modoEscritura)) {
+                oos.writeObject(p);
+            }
 
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "No se pudo guardar, el archivo ya no existe","Error",JOptionPane.WARNING_MESSAGE);
@@ -47,27 +47,39 @@ public class ArchivoObjeto extends Archivo{
 
     @Override
     public List<Publicacion> leerPublicaciones() throws ExcepcionArchivo {
-        List<Publicacion> lista;
+        
+        if(!this.archivo.exists()){
+            return new ArrayList<>();
+        }
         
         try {
             
             this.modoLectura = new FileInputStream(this.archivo);
-            ObjectInputStream ois = new ObjectInputStream(this.modoLectura);
-            lista = new ArrayList<>();
+            List<Publicacion> lista;
             
-            while(ois.readObject()!=null){
-                lista.add((Publicacion)ois.readObject());
+            try (ObjectInputStream ois = new ObjectInputStream(this.modoLectura)) {
+                lista = new ArrayList<>();
+                
+                Object aux = ois.readObject();
+                while(aux!=null){
+                    lista.add((Publicacion)ois.readObject());
+                    aux=ois.readObject();
+                }
             }
             return lista;
 
         } catch (FileNotFoundException e) {
             throw new ExcepcionArchivo("Erro al abrir archivo de objetos en modo lectura , no existe");
+            
         } catch (SecurityException e) {
             throw new ExcepcionArchivo("No tiene acceso para el archivo en modo lectura");
+            
         } catch (StreamCorruptedException e) {
             throw new ExcepcionArchivo("Error con el flujo de datos de cabecera del objeto");
+            
         } catch (NullPointerException e) {
             throw new ExcepcionArchivo("EL manejador de archivo en lectura en Null");
+            
         } catch (IOException e) {
             throw new ExcepcionArchivo("Error al leer en el archivo");
             
@@ -85,5 +97,10 @@ public class ArchivoObjeto extends Archivo{
             }
         }
         return null;
+    }
+
+    @Override
+    public void eliminar(Publicacion p) throws ExcepcionArchivo {
+        
     }
 }

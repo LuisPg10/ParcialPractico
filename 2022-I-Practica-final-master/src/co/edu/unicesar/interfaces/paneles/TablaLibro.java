@@ -44,16 +44,9 @@ public class TablaLibro extends javax.swing.JPanel {
                 "Idbn", "Titulo", "Autor", "Costo", "Año", "No. Edición", "No. Pág"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -108,7 +101,7 @@ public class TablaLibro extends javax.swing.JPanel {
             }
             
         }catch(ExcepcionArchivo ae){
-            JOptionPane.showMessageDialog(null, ae.getMessage(),"Error al cargar los datos",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, ae.getMessage(),"Error al cargar las publicaciones de libros",JOptionPane.WARNING_MESSAGE);
         }
         
     }

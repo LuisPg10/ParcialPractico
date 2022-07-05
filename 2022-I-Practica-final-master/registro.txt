@@ -1,3 +1,0 @@
-L;12134-43535;La macarena;Daniela Gomez;2012;45000.0;345;14
-A;121334-5455;La ciudad de las bestias;Edgar Poe;2002;34500.0;wav;120.0;345.0
-A;42422-3255;Riohacha;12134;2003;12345.0;wav;40.0;123.0
