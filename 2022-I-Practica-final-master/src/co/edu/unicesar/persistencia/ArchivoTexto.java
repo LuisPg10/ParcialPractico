@@ -38,7 +38,7 @@ public class ArchivoTexto extends Archivo{
             this.modoEscritura = new FileWriter(archivo, true);
             pw = new PrintWriter(this.modoEscritura);
             if(p == null){
-                pw.println("");
+                pw.print("");
             }else{
                 pw.println(p.getDataStringFormat());
             }
